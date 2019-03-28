@@ -22,7 +22,7 @@ Tree::Tree(int i){ // konstruktor dla Strażnika
   this->up = this;
   this->left = this;
   this->right = this;
-  this->color = 's';
+  this->color = 'b';
   this->data = -6;
 }
 /******************************************************************************/
@@ -70,102 +70,142 @@ void Tree::add(int k){
     adder->data = k;
     Tree * temp = this;
     while(true){
-      if(k > temp->data){ // sprawdzamy gdzie powinnien pójść nowy węzeł
+      if(adder->data > temp->data){ // sprawdzamy gdzie powinnien pójść nowy węzeł
         if(temp->right != S){  // do prawego poddrzewa
           temp = temp->right;
         }
         else{ // czy lewego
           temp->right = adder;
+          adder->up = temp;
           break;
         }
       }
-      if(k < temp->key){ // analogia do poprzedniego
-        if(temp->left != S)
+      if(adder->data < temp->data){ // analogia do poprzedniego
+        if(temp->left != S){
           temp = temp->left;
+        }
         else{
           temp->left = adder;
+          adder->up = temp;
           break;
         }
       }
     }
-    while(adder->up->color == 'r'){ //jeśli ma czerwonego ojca a sam jest czerwony
 
+    while(adder != S){ //jeśli ma czerwonego ojca a sam jest //czerwony adder->up->color == 'r' && adder->color == 'r'
+    cout << "1";
       if(adder->up == adder->up->up->left){
         temp = adder->up->up->right; // bierzemy stryja
-        if(temp->color=='r'){ // spradzamy jego kolor, AD.A
-          adder->up->color='b'; // zmeiniamy kolor ojcowi
+        if(
+        temp->color =='r' &&
+        adder->color == 'r' &&
+        adder->up->color == 'r'){ // spradzamy jego kolor, AD.A
+          adder->up->color='b'; // zmieniamy kolor ojcowi
           temp->color='b'; // stryjowi
-          adder=adder->up->up;
-          adder->color='r'; //dziadkowi
-          temp = adder->up->up->right; // naprawiamy drzewo do góry!
+          if(adder->up->up->up != S){
+            //adder->up->up->color='r';
+            adder = adder -> up -> up;
+            adder->color = 'r';
+            //temp = adder->up->up->right; // naprawiamy drzewo do góry!
+            continue;
+          }
         }
         //AD.C
-        if(temp->color == 'b' && adder == adder->up->right){
-          adder = adder->up;
-          rotationL(adder);
+        if(
+        temp->color == 'b' &&
+        adder == adder->up->right &&
+        adder->up->color =='r' &&
+        adder->color == 'r'){
+          rotationL(adder->up);
         }
         // AD.B
-        if(temp->color=='b'){
-          adder->up->color = 'b';
-          adder->up->up->color= 'r';
+        if(
+        temp->color=='b' &&
+        adder->up->color =='r' &&
+        adder->color=='r' &&
+        adder == adder->up->left){
           rotationR(adder->up->up);
+          adder->up->color = 'b';
+          adder->up->right -> color = 'r';
         }
       }
       // analogia dla odbicia
+      //
       if(adder->up == adder->up->up->right){
         temp = adder->up->up->left; // bierzemy stryja
-        if(temp->color=='r'){ // spradzamy jego kolor, AD.A
-          adder->up->color='b'; // zmeiniamy kolor ojcowi
+        if(
+        temp->color=='r' &&
+        adder->color == 'r' &&
+        adder->up->color == 'r'){ // spradzamy jego kolor, AD.A
+          adder->up->color='b'; // zmieniamy kolor ojcowi
           temp->color='b'; // stryjowi
-          adder=adder->up->up;
-          adder->color='r'; //dziadkowi
-          temp = adder->up->up->left; // naprawiamy drzewo do góry!
+          if(adder-> up -> up -> up != S){
+            adder=adder->up->up;
+            adder->color='r'; //dziadkowi
+            //temp = adder->up->up->left; // naprawiamy drzewo do góry!
+            continue;
+          }
         }
         //AD.C
-        if(temp->color == 'b' && adder == adder->up->left){
-          adder = adder->up;
-          rotationR(adder);
+        if(
+        temp->color == 'b' &&
+        adder == adder->up->left &&
+        adder->up->color == 'r' &&
+        adder->color == 'r'){
+          rotationR(adder->up);
         }
         // AD.B
-        if(temp->color=='b'){
-          adder->up->color = 'b';
-          adder->up->up->color= 'r';
+        if(
+        temp->color=='b' &&
+        adder->up->color =='r' &&
+        adder->color=='r' &&
+        adder == adder->up->right){
           rotationL(adder->up->up);
+          adder->up->color = 'b';
+          adder->up->left->color='r';
         }
       }
+      adder = adder->up;
+      continue;
     }
   }
-
+  //show(this);
+  //getch();
+  //system("cls");
 }
 /******************************************************************************/
 void Tree::rotationR(Tree * tree){
-  Tree * a = S;
-  if(tree -> left->right =S){ // jeśli syn nic nie ma w prawym poddrzewie
-    tree -> left->right = tree;
+  Tree * b = tree->left;
+  cout << "R";
+  tree->left = b->right;
+  b->right = tree;
+  b->up = tree->up;
+  if(tree->up->left == tree){ // dziadkowi przypisujemy nowego wnuka
+    tree->up->left = b;
   }
-  else{
-    a = tree -> left->right; //jeśli ma to później trafi do lewego poddrzewa
-    tree -> left->right = tree;
+  else {
+    tree->up->right = b;
   }
-  tree->left = a;
-  tree->left->up= tree->up; // zmiana ojców
-  tree->up = tree->right;
-  tree->left =S;
+  tree->up = b;
+  b = NULL;
+  delete b;
 }
 /******************************************************************************/
-void Tree::rotationL(Tree * tree){
-  Tree * a = S;
-  if(tree -> right->left =S){ // jeśli syn nic nie ma w lewym poddrzewie
-    tree ->right->left = tree;
+void Tree::rotationL(Tree * tree){ // przy rotacji w lewo giną dane
+  Tree * b = tree->right;
+  cout << "L";
+  tree->right = b->left; //
+  b->left = tree;
+  b->up = tree->up; // ustawiamy ojca dla poddrzewa
+  if(tree == tree->up->right){
+    tree->up->right = b; // dziadkowi przypisujemy nowego wnuka
   }
   else{
-    a = tree -> right->left; //jeśli ma to później trafi do prawego poddrzewa
-    tree -> right->left = tree;
+    tree->up->left = b;
   }
-  tree->right = a;
-  tree->right->up= tree->up; // zmiana ojców
-  tree->up = tree->right;
-  tree->right = S;
+  tree->up = b; // ojcowi przypisujemy syna jako ojca
+  b = NULL;
+  delete b;
 }
 /******************************************************************************/
 void Tree::show(Tree * post){

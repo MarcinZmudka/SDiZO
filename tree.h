@@ -1,5 +1,6 @@
 using namespace std;
 class Tree  {
+  public:
   Tree * S;
   Tree * up;
   Tree * left;
@@ -7,8 +8,6 @@ class Tree  {
   int data;
   int key;
   char color;
-public:
-
   Tree();
   Tree(int);
   void import();

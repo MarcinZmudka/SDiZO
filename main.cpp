@@ -6,8 +6,7 @@
 //#include "struct.h"
 //#include "table.h"
 //#include "list.h"
-
-#include "heap.h"
+//#include "heap.h"
 #include "tree.h"
 using namespace std;
 /*List * load(){
