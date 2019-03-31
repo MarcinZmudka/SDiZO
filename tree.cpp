@@ -23,7 +23,7 @@ Tree::Tree(int i){ // konstruktor dla Strażnika
   this->left = this;
   this->right = this;
   this->color = 'b';
-  this->data = -6;
+  this->data = NULL;
 }
 /******************************************************************************/
 void Tree::import(){
@@ -155,7 +155,6 @@ void Tree::add(int k){
 /******************************************************************************/
 void Tree::rotationR(Tree * tree){
   Tree * b = tree->left;
-  cout << "R";
   tree->left = b->right;
   b->right = tree;
   b->up = tree->up;
@@ -172,7 +171,6 @@ void Tree::rotationR(Tree * tree){
 /******************************************************************************/
 void Tree::rotationL(Tree * tree){ // przy rotacji w lewo giną dane
   Tree * b = tree->right;
-  cout << "L";
   tree->right = b->left; //
   b->left = tree;
   b->up = tree->up; // ustawiamy ojca dla poddrzewa
@@ -198,10 +196,10 @@ void Tree::show(Tree * post){
   }
 }
 /******************************************************************************/
-Tree Tree::findNext(Tree * tree){
+Tree * Tree::findNext(Tree * tree){
   if(tree->right != S){
     tree = tree->right;
-    while(tree != S){
+    while(tree->left != S){
       tree = tree->left;
     }
     return tree;
@@ -217,11 +215,11 @@ Tree Tree::findNext(Tree * tree){
     }
     tree = NULL;
     delete tree;
-    return NULL;
+    return S;
   }
 }
 /******************************************************************************/
-void Tree::erase(int del){
+void Tree::erase(int del){ // gdzieś jest błąd usuwa więcej niż jedną wartość
   Tree * deleter = this;
   while(deleter->data != del){ // znajdujemy węzeł, który zamierzamy usunąć
     if(deleter->data < del && deleter->right != S){
@@ -232,11 +230,12 @@ void Tree::erase(int del){
     }
   }
   if(deleter -> data != del){
-    cout << endl << "there no such in number in this tree" << endl;
+    cout << endl << "there is not such in number in this tree" << endl;
   }
   else{
     //sposób gdy usuwany węzeł ma jednego lub zero dzieci
-    if(deleter -> left != S){ // jeśli węzel nie ma prawego syna
+    if(deleter -> left != S && deleter -> right == S){ // jeśli węzel nie ma prawego syna
+      cout <<"\n1";
       Tree * son = deleter->left;
       son->up = deleter->up; // nowy ojciec
       if(deleter->up->left == deleter){ // sprawdzamy czy usuwany węzeł jest prawym czy lewym synem
@@ -247,7 +246,8 @@ void Tree::erase(int del){
       }
       delete deleter; // chyba można
     }
-    else if(deleter -> right != S){
+    else if(deleter -> right != S && deleter -> left == S){
+      cout <<"\n2";
       Tree * son = deleter->right;
       son->up = deleter->up; // nowy ojciec
       if(deleter->up->left == deleter){ // sprawdzamy czy usuwany węzeł jest prawym czy lewym synem
@@ -258,14 +258,43 @@ void Tree::erase(int del){
       }
       delete deleter; // chyba można
     }
-    else{
+    else if(deleter -> right == S && deleter -> left == S){ // jeśli nie ma dzieci
+      cout <<"\n3";
       if(deleter->up->left == deleter){ // sprawdzamy czy usuwany węzeł jest prawym czy lewym synem
-        son->up->left = S; //
+        deleter->up->left = S; //
       }
       else{
-        son->up->right == S;
+        deleter->up->right == S;
       }
       delete deleter; // chyba można
     }
-    // tu się ten sposób kończy
+    // here it gets complicated
+    else if(deleter->right == findNext(deleter)){ // jeśli prawy dzieciak jest następnikiem
+      cout <<"\n4";
+      Tree * next = findNext(deleter);
+      next->left = deleter->left;
+      next->up = deleter->up;
+      if(deleter == deleter->up->left){
+        deleter->up->left = next;
+      }
+      else{
+        deleter->up->right = next;
+      }
+      next = NULL;
+      delete next;
+      delete deleter;
+    }
+    else if(deleter->right != findNext(deleter) && deleter->right != S){ // jeśli ma oba dziecka ale prawe nie jest następnikiem
+      cout <<"\n5";
+      Tree * next = findNext(deleter);
+      next->up->left = next->right;
+      next->right = deleter->right;
+      next->up = deleter->up;
+      deleter->up = next;
+      next->left = deleter->left;
+      next  = NULL;
+      delete deleter;
+      delete next;
+    }
+  }
 }
