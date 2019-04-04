@@ -34,8 +34,8 @@ using namespace std;
 int main (){
   Tree * a = new Tree();
   a->import();
-  //a->show(a);
-  a->erase(12);
+  a->show(a);
+  a->remove(12); // usuneło też 13
   a->show(a);
   return 0;
 }

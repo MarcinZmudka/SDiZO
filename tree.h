@@ -13,10 +13,10 @@ class Tree  {
   void import();
   void show(Tree * post);
   void add(int);
-  void erase(int);
+  void remove(int);
   void sort(int);
   void find(int);
   void rotationR(Tree * tree);
   void rotationL(Tree * tree);
-  Tree* findNext(Tree * tree);
+  Tree * findNext(Tree * tree);
 };

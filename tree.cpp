@@ -8,6 +8,7 @@
 #include <conio.h>
 #include <math.h>
 using namespace std;
+// erase nie naprawia poddrzewa
 /******************************************************************************/
 Tree::Tree(){
   this->S = new Tree(1);
@@ -22,7 +23,7 @@ Tree::Tree(int i){ // konstruktor dla Strażnika
   this->up = this;
   this->left = this;
   this->right = this;
-  this->color = 'b';
+  this->color = 's';
   this->data = NULL;
 }
 /******************************************************************************/
@@ -219,82 +220,114 @@ Tree * Tree::findNext(Tree * tree){
   }
 }
 /******************************************************************************/
-void Tree::erase(int del){ // gdzieś jest błąd usuwa więcej niż jedną wartość
-  Tree * deleter = this;
-  while(deleter->data != del){ // znajdujemy węzeł, który zamierzamy usunąć
-    if(deleter->data < del && deleter->right != S){
-      deleter = deleter->right;
+void Tree::remove(int del) {
+    Tree *W, *Y, *Z;
+    Tree * deleter = this;
+    while(deleter->data != del){ // znajdujemy węzeł, który zamierzamy usunąć
+      if(deleter->data < del && deleter->right != S){
+        deleter = deleter->right;
+      }
+      if(deleter->data > del && deleter->left != S){
+        deleter = deleter->left;
+      }
     }
-    if(deleter->data > del && deleter->left != S){
-      deleter = deleter->left;
+    if ((deleter->left == S) || (deleter->right == S)){
+      Y = deleter;
     }
-  }
-  if(deleter -> data != del){
-    cout << endl << "there is not such in number in this tree" << endl;
-  }
-  else{
-    //sposób gdy usuwany węzeł ma jednego lub zero dzieci
-    if(deleter -> left != S && deleter -> right == S){ // jeśli węzel nie ma prawego syna
-      cout <<"\n1";
-      Tree * son = deleter->left;
-      son->up = deleter->up; // nowy ojciec
-      if(deleter->up->left == deleter){ // sprawdzamy czy usuwany węzeł jest prawym czy lewym synem
-        son->up->left = son; //
-      }
-      else{
-        son->up->right == son;
-      }
-      delete deleter; // chyba można
+    else{
+      Y = findNext(deleter);
     }
-    else if(deleter -> right != S && deleter -> left == S){
-      cout <<"\n2";
-      Tree * son = deleter->right;
-      son->up = deleter->up; // nowy ojciec
-      if(deleter->up->left == deleter){ // sprawdzamy czy usuwany węzeł jest prawym czy lewym synem
-        son->up->left = son; //
-      }
-      else{
-        son->up->right == son;
-      }
-      delete deleter; // chyba można
+
+    if (Y->left != S){
+      Z = Y->left;
     }
-    else if(deleter -> right == S && deleter -> left == S){ // jeśli nie ma dzieci
-      cout <<"\n3";
-      if(deleter->up->left == deleter){ // sprawdzamy czy usuwany węzeł jest prawym czy lewym synem
-        deleter->up->left = S; //
-      }
-      else{
-        deleter->up->right == S;
-      }
-      delete deleter; // chyba można
+    else{
+      Z = Y->right;
     }
-    // here it gets complicated
-    else if(deleter->right == findNext(deleter)){ // jeśli prawy dzieciak jest następnikiem
-      cout <<"\n4";
-      Tree * next = findNext(deleter);
-      next->left = deleter->left;
-      next->up = deleter->up;
-      if(deleter == deleter->up->left){
-        deleter->up->left = next;
-      }
-      else{
-        deleter->up->right = next;
-      }
-      next = NULL;
-      delete next;
-      delete deleter;
+    Z->up = Y->up;
+    if (Y == Y->up->left){
+      Y->up->left = Z;
     }
-    else if(deleter->right != findNext(deleter) && deleter->right != S){ // jeśli ma oba dziecka ale prawe nie jest następnikiem
-      cout <<"\n5";
-      Tree * next = findNext(deleter);
-      next->up->left = next->right;
-      next->right = deleter->right;
-      next->up = deleter->up;
-      deleter->up = next;
-      next->left = deleter->left;
-      next  = NULL;
-      delete deleter;
-      delete next;
+    else{
+      Y->up->right = Z;
     }
-  }
+
+    if (Y != deleter){
+      deleter->data = Y->data;
+    }
+    if (Y->color == 'b')   // Naprawa struktury drzewa czerwono-czarnego
+        while ((Z != S) && (Z->color == 'b'))
+            if (Z == Z->up->left) {
+                W = Z->up->right;
+
+                //Przypadek 1
+                if (W->color == 'r') {
+                    W->color = 'b';
+                    Z->up->color = 'r';
+                    rotationL(Z->up);
+                    W = Z->up->right;
+                }
+
+                //Przypadek 2
+                if ((W->left->color == 'b') && (W->right->color == 'b')) {
+                    W->color = 'r';
+                    Z = Z->up;
+                    continue;
+                }
+
+                //Przypadek 3
+                if (W->right->color == 'b') {
+                    W->left->color = 'b';
+                    W->color = 'r';
+                    rotationR(W);
+                    W = Z->up->right;
+                }
+
+                //Przypadek 4
+                W->color = Z->up->color;
+                Z->up->color = 'b';
+                W->right->color = 'b';
+                rotationL(Z->up);
+
+                //Zakończenie pętli
+                Z = S;
+
+                //Przypadki lustrzane
+            } else {
+                W = Z->up->left;
+
+                //Lustrzany przypadek 1
+                if (W->color == 'r') {
+                    W->color = 'b';
+                    Z->up->color = 'r';
+                    rotationL(Z->up);
+                    W = Z->up->left;
+                }
+
+                //Lustrzany przypadek 2
+                if ((W->left->color == 'b') && (W->right->color == 'b')) {
+                    W->color = 'r';
+                    Z = Z->up;
+                    continue;
+                }
+
+                //Lustrzany przypadek 3
+                if (W->left->color == 'b') {
+                    W->right->color = 'b';
+                    W->color = 'r';
+                    rotationL(W);
+                    W = Z->up->left;
+                }
+
+                //Lustrzany przypadek 4
+                W->color = Z->up->color;
+                Z->up->color = 'b';
+                W->left->color = 'b';
+                rotationR(Z->up);
+
+                //Zakończenie pętli
+                Z = S;
+            }
+    Z->color = 'b';
+    delete Y;
 }
