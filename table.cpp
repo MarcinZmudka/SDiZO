@@ -1,13 +1,15 @@
 #include "table.h"
 #include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include<cstdlib>
+#include <string>
 using namespace std;
 
-Table::Table(int size){
-  this->size = size;
-  a = new int[size];
-  for(int i=0; i<size; i++){
-    a[i] = i;
-  }
+Table::Table(){
+  a = NULL;
+  size = 0;
+  import();
 }
 /****************************************************************************/
 void Table::addFirst(int number){
@@ -73,7 +75,7 @@ void Table::deleteLast(){
   a = b;
 }
 /****************************************************************************/
-void Table::deleteRandom(int index){
+void Table::deleteNumber(int index){
   size--;
   int *b= new int [size];
   for(int i=0; i<index; i++){
@@ -84,4 +86,19 @@ void Table::deleteRandom(int index){
   }
   delete[] a;
   a = b;
+}
+/****************************************************************************/
+void Table::import(){
+  string line;
+  fstream file;
+  file.open("value.txt", ios::in);
+  if(file.good() == true)
+  {
+      while(!file.eof())
+      {
+          getline(file, line);
+          addLast(atoi(line.c_str()));
+      }
+      file.close();
+  }
 }

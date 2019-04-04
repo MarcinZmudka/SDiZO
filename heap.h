@@ -12,6 +12,7 @@ public:
   void erase(int);
   void sort(int);
   void find(int);
+  void import();
 };
 
 //#endif

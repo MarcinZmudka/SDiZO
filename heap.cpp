@@ -11,18 +11,7 @@ using namespace std;
 /******************************************************************************/
 Heap::Heap(){
     this -> size = 0;
-    string line;
-    fstream file;
-    file.open("value.txt", ios::in);
-    if(file.good() == true)
-    {
-        while(!file.eof())
-        {
-            getline(file, line);
-            add(atoi(line.c_str()));
-        }
-        file.close();
-    }
+    import();
 }
 /******************************************************************************/
 void Heap::add(int a){
@@ -104,8 +93,23 @@ void Heap::erase(int number){
 void Heap::find(int key){
   for(int i = 0; i< size; i++){
     if(table[i] == key){
-      cout << endl << key << "znajduje się w kocpu" << endl;
+      cout << endl << key << "znajduje się w kopcu" << endl;
       break;
     }
+  }
+}
+/******************************************************************************/
+void Heap::import(){
+  string line;
+  fstream file;
+  file.open("value.txt", ios::in);
+  if(file.good() == true)
+  {
+      while(!file.eof())
+      {
+          getline(file, line);
+          add(atoi(line.c_str()));
+      }
+      file.close();
   }
 }

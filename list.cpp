@@ -1,9 +1,17 @@
 #include "list.h"
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
 using namespace std;
 
+List::List(){
+  next = NULL;
+  prev = NULL;
+  import();
+}
+/****************************************************************************/
 List::List(int value){
-  this -> value = value;
+  this->value = value;
   next = NULL;
   prev = NULL;
 }
@@ -32,7 +40,7 @@ int  List::getValue(){
   return value;
 }
 /****************************************************************************/
-void List::deleteNumber(int value1){
+void List::remove(int value1){
   List * more;
   more = this->getNext();
   while(more){
@@ -60,6 +68,10 @@ void List::addRandom(int previous, int value1){
     }
     more = more->getNext();
   }
+  add = NULL;
+  more = NULL;
+  delete add;
+  delete more;
 }
 /****************************************************************************/
 void List::addFirst(int value1){
@@ -77,6 +89,8 @@ void List::addLast(int value1){
     }
     more = more->getNext();
   }
+  more = NULL;
+  delete more;
 }
 /****************************************************************************/
 void List::search( int value1 ){
@@ -88,6 +102,8 @@ void List::search( int value1 ){
     }
     more = more->getNext();
   }
+  more = NULL;
+  delete more;
 }
   /****************************************************************************/
   void List::show(){
@@ -98,5 +114,24 @@ void List::search( int value1 ){
     while(a){
       cout << a->getValue() << endl;
       a = a->getNext();
+    }
+    a = NULL;
+    delete a;
+  }
+  /*****************************************************************************/
+  void List::import(){
+    string line;
+    fstream file;
+    file.open("value.txt", ios::in);
+    getline(file, line);
+    value = atoi(line.c_str());
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line);
+            addLast(atoi(line.c_str()));
+        }
+        file.close();
     }
   }

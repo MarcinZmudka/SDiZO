@@ -1,6 +1,5 @@
 #ifndef STRUCT_H
 #define STRUCT_H
-#include "struct.h"
 using namespace std;
 
 class List {
@@ -8,6 +7,7 @@ class List {
   List * next;
   List * prev;
 public:
+  List();
   List(int);
   List * getNext();
   void setNext(List * next);
@@ -15,11 +15,12 @@ public:
   void setPrev(List * prev);
   void setValue(int);
   int getValue();
-  void delete(int);
+  void remove(int);
   void addRandom(int, int);
   void addFirst(int);
   void addLast(int);
   void search(int);
   void show();
+  void import();
 };
 #endif
