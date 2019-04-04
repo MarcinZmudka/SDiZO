@@ -40,7 +40,7 @@ int  List::getValue(){
   return value;
 }
 /****************************************************************************/
-void List::remove(int value1){
+void List::deleteNumber(int value1){
   List * more;
   more = this->getNext();
   while(more){
@@ -135,3 +135,11 @@ void List::search( int value1 ){
         file.close();
     }
   }
+/*****************************************************************************/
+void List::deleteFirst(){
+
+}
+/*****************************************************************************/
+void List::deleteLast(){
+
+}

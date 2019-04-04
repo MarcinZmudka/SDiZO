@@ -1,7 +1,5 @@
-#ifndef STRUCT_H
-#define STRUCT_H
 using namespace std;
-
+ //dorobić usuwanie na pierwszej i ostaniej pozycji
 class List {
   int value;
   List * next;
@@ -15,7 +13,9 @@ public:
   void setPrev(List * prev);
   void setValue(int);
   int getValue();
-  void remove(int);
+  void deleteNumber(int);
+  void deleteFirst();
+  void deleteLast();
   void addRandom(int, int);
   void addFirst(int);
   void addLast(int);
@@ -23,4 +23,3 @@ public:
   void show();
   void import();
 };
-#endif
