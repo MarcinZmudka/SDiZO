@@ -1,6 +1,5 @@
 using namespace std;
-#ifndef STRUCT_H
-#define STRUCT_H
+// dodać wyszukiwanie
 class Table {
   int * a;
   int size;
@@ -15,4 +14,3 @@ public:
   void deleteNumber(int index);
   void import();
 };
-#endif
