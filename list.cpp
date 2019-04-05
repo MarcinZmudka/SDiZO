@@ -45,9 +45,7 @@ void List::deleteNumber(int value1){
   more = this->getNext();
   while(more){
     if(more->getValue() == value1){
-
       (more->getPrev())->setNext(more->getNext());
-      cout << more->getPrev()->getValue() << endl;
       more->getNext()->setPrev(more->getPrev());
       break;
     }
@@ -55,18 +53,23 @@ void List::deleteNumber(int value1){
   }
 }
 /****************************************************************************/
-void List::addRandom(int previous, int value1){
+void List::add(int previous, int value1){
   List * more;
   List * add = new List(value1);
   more = this;
+  bool check = false;
   while(more){
     if( previous == more->getValue()){
       add->setNext(more->getNext());
       add->setPrev(more);
       more->setNext(add);
       add->getNext()->setPrev(add);
+    check = true;
     }
     more = more->getNext();
+  }
+  if(check == false){
+    addFirst(value1);
   }
   add = NULL;
   more = NULL;
@@ -74,33 +77,25 @@ void List::addRandom(int previous, int value1){
   delete more;
 }
 /****************************************************************************/
-void List::addFirst(int value1){
+List * List::addFirst(int value1){
   this->setPrev(new List(value1));
   this->getPrev()->setNext(this);
-}
-/****************************************************************************/
-void List::addLast(int value1){
-  List * more = this;
-  while(more){
-    if(!more->getNext()){
-      more->setNext(new List(value1));
-      more->getNext()->setPrev(more);
-      break;
-    }
-    more = more->getNext();
-  }
-  more = NULL;
-  delete more;
+  return this->getPrev();
 }
 /****************************************************************************/
 void List::search( int value1 ){
   List * more = this;
+  bool check = false;
   while(more->getNext()){
     if(more->getValue() == value1){
-      cout << "jest" << endl;
+      cout << value1 << "znajduje sie w liscie" << endl;
+      check = true;
       break;
     }
     more = more->getNext();
+  }
+  if(!check){
+    cout << value1 << " nie znajduje sie w liscie" << endl;
   }
   more = NULL;
   delete more;
@@ -119,27 +114,39 @@ void List::search( int value1 ){
     delete a;
   }
   /*****************************************************************************/
-  void List::import(){
+  void List::import(){ // dodawanie nie działa, pomyśleć nad rozwiązaniem
     string line;
     fstream file;
     file.open("value.txt", ios::in);
     getline(file, line);
-    value = atoi(line.c_str());
+    List * niu = this;
+    niu->setValue(atoi(line.c_str()));
     if(file.good() == true)
     {
         while(!file.eof())
         {
             getline(file, line);
-            addLast(atoi(line.c_str()));
+            niu = niu->addFirst(atoi(line.c_str()));
         }
         file.close();
     }
   }
 /*****************************************************************************/
 void List::deleteFirst(){
-
+  List * nexter = this;
+  while(nexter->getNext() != NULL){
+    nexter->setValue(nexter->getNext()->getValue());
+    nexter = nexter->getNext();
+  }
+  nexter->getPrev()->setNext(NULL);
+  delete nexter;
 }
 /*****************************************************************************/
 void List::deleteLast(){
-
+  List * nexter = next;
+  while(nexter->getNext() != NULL){
+    nexter = nexter->getNext();
+  }
+  nexter->getPrev()->setNext(NULL);
+  delete nexter;
 }

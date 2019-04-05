@@ -1,5 +1,5 @@
 using namespace std;
- //dorobić usuwanie na pierwszej i ostaniej pozycji
+
 class List {
   int value;
   List * next;
@@ -16,9 +16,8 @@ public:
   void deleteNumber(int);
   void deleteFirst();
   void deleteLast();
-  void addRandom(int, int);
-  void addFirst(int);
-  void addLast(int);
+  void add(int, int);
+  List * addFirst(int);
   void search(int);
   void show();
   void import();

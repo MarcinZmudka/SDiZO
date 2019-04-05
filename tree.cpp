@@ -17,6 +17,7 @@ Tree::Tree(){
   this->left = S;
   this->color='b';
   this->data = -123;
+  this->import();
 }
 /******************************************************************************/
 Tree::Tree(int i){ // konstruktor dla Strażnika

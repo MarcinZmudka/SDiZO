@@ -48,32 +48,41 @@ void Heap::show(){
   for(int i = 0; i<size; i++){
     cout << table[i] << " ";
   }
-  cout << endl;
+  /*cout << endl;
   int num = 0;
   int size1 = size;
-  while(size1 >= pow(2, num)){
+  while(size1 > pow(2, num)){
     num++;
   }
-  for(int i=1; i<num+1; i++){
-    int number =  (2*num+1)/(i+1);
-    for(int j=0; j<2*num+1; j++){
-      if(j == number){
-        cout << table[1];
-      }
-      else{
-        cout << " ";
-      }
+  String[] first = new String [num];
+  int num1 = num;
+  for(int i=0; i< num; i++){
+    int num2 = pow(2, num1-1);
+    num1--;
+    String a = "";
+    for(int j=0; j<num2){
+      a+= " ";
     }
+    first[i] = a;
   }
-/*  2^1
-  .....
-  2^8*2+1*/
+  String[] mid = new String[num];
+  num1 = num;
+  for(int i=num1-1; i>-1; i--){
+    for(int j =0; j<pow(i, num1); i++){
+      mid[i] += " "
+    }
+    mid[i]+= " ";
+    num1--;
+  }
+  for(int i=0; i<num; i++){
+
+  }*/
 }
 /******************************************************************************/
-void Heap::erase(int number){
+void Heap::erase(int number){ //usuwanie z kopca
   size--;
   int index = 0;
-  while(table[index] != number){
+  while(table[index] != number){ // szukamy jaki indeks ma usuwana liczba
     index++;
   }
   int * table2 = new int[size];
@@ -93,7 +102,7 @@ void Heap::erase(int number){
 void Heap::find(int key){
   for(int i = 0; i< size; i++){
     if(table[i] == key){
-      cout << endl << key << "znajduje się w kopcu" << endl;
+      cout << endl << key << "znajduje sie w kopcu" << endl;
       break;
     }
   }
