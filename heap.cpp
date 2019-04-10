@@ -45,7 +45,7 @@ void Heap::sort(int index){
 }
 /******************************************************************************/
 void Heap::show(){
-  for(int i = 0; i<size; i++){
+  for(int i = 0; i<size-1; i++){
     cout << table[i] << " ";
   }
   /*cout << endl;
@@ -82,20 +82,25 @@ void Heap::show(){
 void Heap::erase(int number){ //usuwanie z kopca
   size--;
   int index = 0;
-  while(table[index] != number){ // szukamy jaki indeks ma usuwana liczba
+  while(table[index] != number && index <= size){ // szukamy jaki indeks ma usuwana liczba
     index++;
   }
-  int * table2 = new int[size];
-  for(int i=0; i<index;i++){
-    table2[i] = table[i];
-  }
-  for(int i = index; i<size;i++){
-    table2[i] = table[i+1];
-  }
-  delete[] table;
-  table = table2;
-  for(int i=size; i>0; i--){
-    sort(i);
+  if(index == size){
+    cout << "\n podana wartosc nie znajdue sie w kopcu!\n";
+  }else{
+    int * table2 = new int[size];
+    for(int i=0; i<index;i++){
+      table2[i] = table[i];
+    }
+
+    for(int i = index; i<size;i++){
+      table2[i] = table[i+1];
+    }
+    delete[] table;
+    table = table2;
+    for(int i=size; i>0; i--){
+      sort(i);
+    }
   }
 }
 /******************************************************************************/
@@ -111,7 +116,7 @@ void Heap::find(int key){
 void Heap::import(){
   string line;
   fstream file;
-  file.open("value.txt", ios::in);
+  file.open("value25000.txt", ios::in);
   if(file.good() == true)
   {
       while(!file.eof())

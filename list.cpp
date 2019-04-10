@@ -117,7 +117,7 @@ void List::search( int value1 ){
   void List::import(){ // dodawanie nie działa, pomyśleć nad rozwiązaniem
     string line;
     fstream file;
-    file.open("value.txt", ios::in);
+    file.open("value25000.txt", ios::in);
     getline(file, line);
     List * niu = this;
     niu->setValue(atoi(line.c_str()));
