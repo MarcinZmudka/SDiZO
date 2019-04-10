@@ -35,17 +35,22 @@ void Table::addLast(int number){
 }
 /****************************************************************************/
 void Table::addRandom(int number, int index){
-  size++;
-  int *b = new int [size];
-  for(int i =0; i<index; i++){
-    b[i]=a[i];
+  if(index > size){
+    cout << "Za duzy indeks\n";
   }
-  b[index] = number;
-  for(int i = index+1; i<size;i++){
-    b[i] = a[i-1];
+  else{
+    size++;
+    int *b = new int [size];
+    for(int i =0; i<index; i++){
+      b[i]=a[i];
+    }
+    b[index] = number;
+    for(int i = index+1; i<size;i++){
+      b[i] = a[i-1];
+    }
+    delete[] a;
+    a = b;
   }
-  delete[] a;
-  a = b;
 }
 /****************************************************************************/
 void Table::show(){
@@ -76,29 +81,48 @@ void Table::deleteLast(){
 }
 /****************************************************************************/
 void Table::deleteNumber(int index){
-  size--;
-  int *b= new int [size];
-  for(int i=0; i<index; i++){
-    b[i] = a[i];
+  if(size < index){
+    cout << "Wybrales liczbe spoza indeksu\n";
   }
-  for(int i=index; i<size+1; i++){
-    b[i] = a[i+1];
+  else{
+    size--;
+    int *b= new int [size];
+    for(int i=0; i<index; i++){
+      b[i] = a[i];
+    }
+    for(int i=index; i<size+1; i++){
+      b[i] = a[i+1];
+    }
+    delete[] a;
+    a = b;
   }
-  delete[] a;
-  a = b;
 }
 /****************************************************************************/
 void Table::import(){
   string line;
   fstream file;
-  file.open("value.txt", ios::in);
-  if(file.good() == true)
-  {
+  file.open("value25000.txt", ios::in);
+  if(file.good() == true){
       while(!file.eof())
       {
           getline(file, line);
           addLast(atoi(line.c_str()));
       }
       file.close();
+  }
+}
+/****************************************************************************/
+void Table::find(int find){
+  int i = 0;
+  while(i < size){
+    if(a[i] == find){
+      cout << find << " znajduje sie w tablicy\n";
+      break;
+    }
+    i++;
+  }
+  i++;
+  if(i == size){
+    cout << find << " nie znajduje sie w tablicy\n";
   }
 }

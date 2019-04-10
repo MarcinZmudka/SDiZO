@@ -13,4 +13,5 @@ public:
   void deleteLast();
   void deleteNumber(int index);
   void import();
+  void find(int);
 };
