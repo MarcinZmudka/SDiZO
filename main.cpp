@@ -9,15 +9,11 @@
 #include "list.h"
 #include "heap.h"
 #include "tree.h"
-// to do
-// show dla kopca
-// erase dla kopca wywala
-// rbt import zawiesza
 using namespace std;
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
 
-void StartCounter() // sekunda trwa tysiąc
+void StartCounter()
 {
     LARGE_INTEGER li;
     if(!QueryPerformanceFrequency(&li))
@@ -28,12 +24,14 @@ void StartCounter() // sekunda trwa tysiąc
     QueryPerformanceCounter(&li);
     CounterStart = li.QuadPart;
 }
-double GetCounter()
+/******************************************************************************/
+double GetCounter() // podaje czas w milisekundach
 {
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
     return double(li.QuadPart-CounterStart)/PCFreq;
 }
+/******************************************************************************/
 void tableMenu(){
   int choose;
   Table * table = new Table();
@@ -95,6 +93,7 @@ void tableMenu(){
     }
   }
 }
+/******************************************************************************/
 void listMenu(){
   int choose = 0;
   List * list = new List();
@@ -153,6 +152,7 @@ void listMenu(){
     }
   }
 }
+/******************************************************************************/
 void heapMenu(){
   int choose = 0;
   Heap * heap = new Heap();
@@ -195,9 +195,11 @@ void heapMenu(){
     }
   }
 }
+/******************************************************************************/
 void treeMenu(){
   int choose = 0;
   Tree * tree = new Tree();
+  tree->import();
   while(choose != 5){
     system("cls");
     cout << " 1 - Dodaj na poczatek\n"
@@ -237,14 +239,41 @@ void treeMenu(){
     }
   }
 }
+/******************************************************************************/
 int main (){
-  List * at = new List();
-  /*StartCounter();
-  Sleep(1000);
-  cout << GetCounter() <<"\n";*/
+  fstream file("1000.txt", ios::out);
+  /*if(file.good()){
+    for(int i=0;i< 5000; i++){
+      file << i << endl;
+      file.flush();
+    }
+  }*/
+  Tree * tree = new Tree();
+  tree->import();
+  tree->show(tree);
+  /*
+  Tree * table = new Tree();
+  StartCounter();
+  table->import();
+  file << GetCounter() << endl;
+  file.flush();
+  table->find(1);
+  StartCounter();
+  table->add(115268);
+  file << GetCounter() << endl;
+  file.flush();
+  StartCounter();
+  table->remove(1);
+  file << GetCounter() << endl;
+  file.flush();
+  StartCounter();
+  table->find(14996);
+  file << GetCounter() << endl;
+  file.flush();
+  file.close();*/
   int choose;
   while( choose != 5){
-    system("cls");
+    //system("cls");
     cout << "Welcome !\n"
          << " 1 - table\n"
          << " 2 - list\n"
