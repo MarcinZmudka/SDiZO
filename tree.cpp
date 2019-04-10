@@ -7,8 +7,8 @@
 #include <string>
 #include <conio.h>
 #include <math.h>
+#include <windows.h>
 using namespace std;
-// erase nie naprawia poddrzewa
 /******************************************************************************/
 Tree::Tree(){
   this->S = new Tree(1);
@@ -16,8 +16,7 @@ Tree::Tree(){
   this->right = S;
   this->left = S;
   this->color='b';
-  this->data = -123;
-  this->import();
+  this->data = 123;
 }
 /******************************************************************************/
 Tree::Tree(int i){ // konstruktor dla Strażnika
@@ -45,22 +44,24 @@ void Tree::import(){
 /******************************************************************************/
 void Tree::find(int l){
   Tree * look = this;
-  while(look != S && look->key != l){
-    if(l > look->key){
+  while(look != S && look->data != l){
+    if(l > look->data){
       look = look->right;
     }
     else{
       look = look->left;
     }
-    if(look-> key == l){
-      cout << endl << "Dana wartość występuje w drzewie";
-      break;
-    }
+  }
+  if(look-> data == l){
+    cout << endl << "Dana wartosc wystepuje w drzewie";
+  }
+  else{
+    cout << endl << "Dana wartosc nie wystepuje w drzewie";
   }
 }
 /******************************************************************************/
 void Tree::add(int k){
-  if(this->left == S && this->right == S && this->data == -123){
+  if(this->left == S && this->right == S && this->data == 123){
     this->data = k;
   }
   else{
@@ -157,31 +158,31 @@ void Tree::add(int k){
 /******************************************************************************/
 void Tree::rotationR(Tree * tree){
   Tree * b = tree->left;
-  tree->left = b->right;
-  b->right = tree;
-  b->up = tree->up;
   if(tree->up->left == tree){ // dziadkowi przypisujemy nowego wnuka
     tree->up->left = b;
   }
   else {
     tree->up->right = b;
   }
+  tree->left = b->right;
+  b->right = tree;
+  b->up = tree->up;
   tree->up = b;
   b = NULL;
   delete b;
 }
 /******************************************************************************/
-void Tree::rotationL(Tree * tree){ // przy rotacji w lewo giną dane
+void Tree::rotationL(Tree * tree){
   Tree * b = tree->right;
-  tree->right = b->left; //
-  b->left = tree;
-  b->up = tree->up; // ustawiamy ojca dla poddrzewa
   if(tree == tree->up->right){
     tree->up->right = b; // dziadkowi przypisujemy nowego wnuka
   }
   else{
     tree->up->left = b;
   }
+  tree->right = b->left; //
+  b->left = tree;
+  b->up = tree->up; // ustawiamy ojca dla poddrzewa
   tree->up = b; // ojcowi przypisujemy syna jako ojca
   b = NULL;
   delete b;
@@ -190,10 +191,10 @@ void Tree::rotationL(Tree * tree){ // przy rotacji w lewo giną dane
 void Tree::show(Tree * post){
   cout << " "<< post->data << post->color << endl;
   cout << post->left->data << post->left->color << " " << post->right->data << post->right->color << endl << endl;
-  if(post->left != S){
+  if(post->left->color != 's'){
     show(post->left);
   }
-  if(post ->right != S){
+  if(post->right->color != 's'){
     show(post->right);
   }
 }
@@ -224,13 +225,17 @@ Tree * Tree::findNext(Tree * tree){
 void Tree::remove(int del) {
     Tree *W, *Y, *Z;
     Tree * deleter = this;
-    while(deleter->data != del){ // znajdujemy węzeł, który zamierzamy usunąć
-      if(deleter->data < del && deleter->right != S){
+    while(deleter->data != del && deleter!= S){ // znajdujemy węzeł, który zamierzamy usunąć
+      if(deleter->data < del){
         deleter = deleter->right;
       }
-      if(deleter->data > del && deleter->left != S){
+      if(deleter->data > del){
         deleter = deleter->left;
       }
+    }
+    if(deleter->data != del){
+      cout << "\nZadana wartosc nie znajduje sie w drzewie \n";
+      return;
     }
     if ((deleter->left == S) || (deleter->right == S)){
       Y = deleter;
