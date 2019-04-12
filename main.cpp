@@ -248,18 +248,16 @@ int main (){
       file.flush();
     }
   }*/
-  Tree * tree = new Tree();
-  tree->import();
-  tree->show(tree);
-  /*
+  /*Tree * tree = new Tree();
+  tree = tree->import();
+  tree->show(tree);*/
   Tree * table = new Tree();
   StartCounter();
-  table->import();
+  table = table->import();
   file << GetCounter() << endl;
   file.flush();
-  table->find(1);
   StartCounter();
-  table->add(115268);
+  table = table->add(115268);
   file << GetCounter() << endl;
   file.flush();
   StartCounter();
@@ -270,7 +268,8 @@ int main (){
   table->find(14996);
   file << GetCounter() << endl;
   file.flush();
-  file.close();*/
+  file.close();
+  cout << "elo";
   int choose;
   while( choose != 5){
     //system("cls");

@@ -10,9 +10,9 @@ class Tree  {
   char color;
   Tree();
   Tree(int);
-  void import();
+  Tree * import();
   void show(Tree * post);
-  void add(int);
+  Tree * add(int);
   void remove(int);
   void sort(int);
   void find(int);

@@ -12,10 +12,11 @@ using namespace std;
 /******************************************************************************/
 Tree::Tree(){
   this->S = new Tree(1);
-  this->up = S;
-  this->right = S;
-  this->left = S;
+  this->up = this->S;
+  this->right = this->S;
+  this->left = this->S;
   this->color='b';
+  this->up->color ='s';
   this->data = 123;
 }
 /******************************************************************************/
@@ -24,22 +25,25 @@ Tree::Tree(int i){ // konstruktor dla Strażnika
   this->left = this;
   this->right = this;
   this->color = 's';
-  this->data = NULL;
+  this->data = -1;
 }
 /******************************************************************************/
-void Tree::import(){
+Tree * Tree::import(){
   string line;
   fstream file;
-  file.open("value.txt", ios::in);
+  Tree * tree;
+  file.open("value1000.txt", ios::in);
   if(file.good() == true)
   {
       while(!file.eof())
       {
           getline(file, line);
-          add(atoi(line.c_str()));
+          int a = atoi(line.c_str());
+          tree = tree->add(a);
       }
       file.close();
   }
+  return tree;
 }
 /******************************************************************************/
 void Tree::find(int l){
@@ -60,7 +64,7 @@ void Tree::find(int l){
   }
 }
 /******************************************************************************/
-void Tree::add(int k){
+Tree * Tree::add(int k){
   if(this->left == S && this->right == S && this->data == 123){
     this->data = k;
   }
@@ -74,7 +78,7 @@ void Tree::add(int k){
     Tree * temp = this;
     while(true){
       if(adder->data > temp->data){ // sprawdzamy gdzie powinnien pójść nowy węzeł
-        if(temp->right != S){  // do prawego poddrzewa
+        if(temp->right->color != 's'){  // do prawego poddrzewa
           temp = temp->right;
         }
         else{ // czy lewego
@@ -84,7 +88,7 @@ void Tree::add(int k){
         }
       }
       if(adder->data < temp->data){ // analogia do poprzedniego
-        if(temp->left != S){
+        if(temp->left->color != 's'){
           temp = temp->left;
         }
         else{
@@ -94,7 +98,7 @@ void Tree::add(int k){
         }
       }
     }
-    while(adder->up != S && adder->up->color == 'r'){ //jeśli ma czerwonego ojca a sam jest //czerwony adder->up->color == 'r' && adder->color == 'r'
+    while(adder->up->color != 's' && adder->up->color == 'r'){ //jeśli ma czerwonego ojca a sam jest //czerwony adder->up->color == 'r' && adder->color == 'r'
       if(adder->up == adder->up->up->left){
         temp = adder->up->up->right; // bierzemy stryja
         if(
@@ -110,14 +114,17 @@ void Tree::add(int k){
           }
         //AD.C
         if(
-        temp->color == 'b' &&
         adder == adder->up->right &&
         adder->up->color =='r' &&
         adder->color == 'r'){
           rotationL(adder->up);
+          adder = adder->left;
         }
         // AD.B
         rotationR(adder->up->up);
+        if(adder->up->color == 's'){
+          break;
+        }
         adder->up->color = 'b';
         adder->up->right -> color = 'r';
         break;
@@ -139,13 +146,16 @@ void Tree::add(int k){
 
         //AD.C
         if(
-        temp->color == 'b' &&
         adder == adder->up->left &&
         adder->up->color == 'r' &&
         adder->color == 'r'){
           rotationR(adder->up);
+          adder=adder->right;
         }
         // AD.B
+        if(adder->up->color == 's'){
+          break;
+        }
         rotationL(adder->up->up);
         adder->up->color = 'b';
         adder->up->left->color='r';
@@ -153,7 +163,12 @@ void Tree::add(int k){
       }
     }
   }
-  this->color = 'b';
+  Tree * temp = this;
+  while(temp->up->color != 's'){
+    temp = temp->up;
+  }
+  temp->color = 'b';
+  return temp;
 }
 /******************************************************************************/
 void Tree::rotationR(Tree * tree){
@@ -174,8 +189,11 @@ void Tree::rotationR(Tree * tree){
 /******************************************************************************/
 void Tree::rotationL(Tree * tree){
   Tree * b = tree->right;
-  if(tree == tree->up->right){
+  if(tree == tree->up->right && !(tree->up == this->S)){
     tree->up->right = b; // dziadkowi przypisujemy nowego wnuka
+  }
+  else if(tree->up == this->S){
+
   }
   else{
     tree->up->left = b;
