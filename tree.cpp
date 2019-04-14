@@ -77,6 +77,9 @@ Tree * Tree::add(int k){
     adder->data = k;
     Tree * temp = this;
     while(true){
+      if(adder->data == temp->data){
+        break;
+      }
       if(adder->data > temp->data){ // sprawdzamy gdzie powinnien pójść nowy węzeł
         if(temp->right->color != 's'){  // do prawego poddrzewa
           temp = temp->right;
@@ -218,15 +221,15 @@ void Tree::show(Tree * post){
 }
 /******************************************************************************/
 Tree * Tree::findNext(Tree * tree){
-  if(tree->right != S){
+  if(tree->right->color != 's'){
     tree = tree->right;
-    while(tree->left != S){
+    while(tree->left->color != 's'){
       tree = tree->left;
     }
     return tree;
   }
   else{
-    while(tree != S){
+    while(tree->color != 's'){
       if(tree == tree->up->left){
         return tree;
       }
@@ -236,14 +239,14 @@ Tree * Tree::findNext(Tree * tree){
     }
     tree = NULL;
     delete tree;
-    return S;
+    return this->S;
   }
 }
 /******************************************************************************/
 void Tree::remove(int del) {
     Tree *W, *Y, *Z;
     Tree * deleter = this;
-    while(deleter->data != del && deleter!= S){ // znajdujemy węzeł, który zamierzamy usunąć
+    while(deleter->data != del && deleter->color != 's'){ // znajdujemy węzeł, który zamierzamy usunąć
       if(deleter->data < del){
         deleter = deleter->right;
       }
@@ -255,14 +258,14 @@ void Tree::remove(int del) {
       cout << "\nZadana wartosc nie znajduje sie w drzewie \n";
       return;
     }
-    if ((deleter->left == S) || (deleter->right == S)){
+    if ((deleter->left->color == 's') || (deleter->right->color == 's')){
       Y = deleter;
     }
     else{
       Y = findNext(deleter);
     }
 
-    if (Y->left != S){
+    if (Y->left->color != 's'){
       Z = Y->left;
     }
     else{
@@ -280,78 +283,81 @@ void Tree::remove(int del) {
       deleter->data = Y->data;
     }
     if (Y->color == 'b')   // Naprawa struktury drzewa czerwono-czarnego
-        while ((Z != S) && (Z->color == 'b'))
-            if (Z == Z->up->left) {
-                W = Z->up->right;
+        while ((Z->color != 's') && (Z->color == 'b')){
+          cout << "e";
+          if (Z == Z->up->left) {
+              W = Z->up->right;
 
-                //Przypadek 1
-                if (W->color == 'r') {
-                    W->color = 'b';
-                    Z->up->color = 'r';
-                    rotationL(Z->up);
-                    W = Z->up->right;
-                }
+              //Przypadek 1
+              if (W->color == 'r') {
+                  W->color = 'b';
+                  Z->up->color = 'r';
+                  rotationL(Z->up);
+                  W = Z->up->right;
+              }
 
-                //Przypadek 2
-                if ((W->left->color == 'b') && (W->right->color == 'b')) {
-                    W->color = 'r';
-                    Z = Z->up;
-                    continue;
-                }
+              //Przypadek 2
+              if ((W->left->color == 'b') && (W->right->color == 'b')) {
+                  W->color = 'r';
+                  Z = Z->up;
+                  continue;
+              }
 
-                //Przypadek 3
-                if (W->right->color == 'b') {
-                    W->left->color = 'b';
-                    W->color = 'r';
-                    rotationR(W);
-                    W = Z->up->right;
-                }
+              //Przypadek 3
+              if (W->right->color == 'b') {
+                  W->left->color = 'b';
+                  W->color = 'r';
+                  rotationR(W);
+                  W = Z->up->right;
+              }
 
-                //Przypadek 4
-                W->color = Z->up->color;
-                Z->up->color = 'b';
-                W->right->color = 'b';
-                rotationL(Z->up);
+              //Przypadek 4
+              W->color = Z->up->color;
+              Z->up->color = 'b';
+              W->right->color = 'b';
+              rotationL(Z->up);
 
-                //Zakończenie pętli
-                Z = S;
+              //Zakończenie pętli
+              Z = S;
 
-                //Przypadki lustrzane
-            } else {
-                W = Z->up->left;
+              //Przypadki lustrzane
+          } else {
+              W = Z->up->left;
 
-                //Lustrzany przypadek 1
-                if (W->color == 'r') {
-                    W->color = 'b';
-                    Z->up->color = 'r';
-                    rotationL(Z->up);
-                    W = Z->up->left;
-                }
+              //Lustrzany przypadek 1
+              if (W->color == 'r') {
+                  W->color = 'b';
+                  Z->up->color = 'r';
+                  rotationL(Z->up);
+                  W = Z->up->left;
+              }
 
-                //Lustrzany przypadek 2
-                if ((W->left->color == 'b') && (W->right->color == 'b')) {
-                    W->color = 'r';
-                    Z = Z->up;
-                    continue;
-                }
+              //Lustrzany przypadek 2
+              if ((W->left->color == 'b') && (W->right->color == 'b')) {
+                  W->color = 'r';
+                  Z = Z->up;
+                  continue;
+              }
 
-                //Lustrzany przypadek 3
-                if (W->left->color == 'b') {
-                    W->right->color = 'b';
-                    W->color = 'r';
-                    rotationL(W);
-                    W = Z->up->left;
-                }
+              //Lustrzany przypadek 3
+              if (W->left->color == 'b') {
+                  W->right->color = 'b';
+                  W->color = 'r';
+                  rotationL(W);
+                  W = Z->up->left;
+              }
 
-                //Lustrzany przypadek 4
-                W->color = Z->up->color;
-                Z->up->color = 'b';
-                W->left->color = 'b';
-                rotationR(Z->up);
+              //Lustrzany przypadek 4
+              W->color = Z->up->color;
+              Z->up->color = 'b';
+              W->left->color = 'b';
+              rotationR(Z->up);
 
-                //Zakończenie pętli
-                Z = S;
-            }
+              //Zakończenie pętli
+              Z = S;
+          }
+        }
+
     Z->color = 'b';
     delete Y;
 }

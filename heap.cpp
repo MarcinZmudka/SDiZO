@@ -116,7 +116,7 @@ void Heap::find(int key){
 void Heap::import(){
   string line;
   fstream file;
-  file.open("value25000.txt", ios::in);
+  file.open("value.txt", ios::in);
   if(file.good() == true)
   {
       while(!file.eof())

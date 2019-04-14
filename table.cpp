@@ -101,7 +101,7 @@ void Table::deleteNumber(int index){
 void Table::import(){
   string line;
   fstream file;
-  file.open("value25000.txt", ios::in);
+  file.open("value.txt", ios::in);
   if(file.good() == true){
       while(!file.eof())
       {

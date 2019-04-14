@@ -64,12 +64,12 @@ void List::add(int previous, int value1){
       add->setPrev(more);
       more->setNext(add);
       add->getNext()->setPrev(add);
-    check = true;
+      check = true;
     }
     more = more->getNext();
   }
   if(check == false){
-    addFirst(value1);
+    cout << "\n wartosc poprzedzajaca nie zostala odnaleziona\n";
   }
   add = NULL;
   more = NULL;
@@ -117,7 +117,7 @@ void List::search( int value1 ){
   void List::import(){ // dodawanie nie działa, pomyśleć nad rozwiązaniem
     string line;
     fstream file;
-    file.open("value25000.txt", ios::in);
+    file.open("value.txt", ios::in);
     getline(file, line);
     List * niu = this;
     niu->setValue(atoi(line.c_str()));
