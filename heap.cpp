@@ -48,35 +48,54 @@ void Heap::show(){
   for(int i = 0; i<size-1; i++){
     cout << table[i] << " ";
   }
-  /*cout << endl;
+  cout << endl;
   int num = 0;
   int size1 = size;
   while(size1 > pow(2, num)){
     num++;
   }
-  String[] first = new String [num];
+  string * first = new string [num];
   int num1 = num;
-  for(int i=0; i< num; i++){
+  for(int i=0; i< num; i++){ //OBLICZA ODSTĘP PIERWSZEGO ELEMENTU OD ŚCIANY
     int num2 = pow(2, num1-1);
     num1--;
-    String a = "";
-    for(int j=0; j<num2){
+    string a = "";
+    for(int j=0; j<num2;j++){
       a+= " ";
     }
     first[i] = a;
   }
-  String[] mid = new String[num];
+  string * mid = new string[num];
+  for(int i=0; i<num; i++){
+    mid[i]="";
+  }
   num1 = num;
-  for(int i=num1-1; i>-1; i--){
-    for(int j =0; j<pow(i, num1); i++){
-      mid[i] += " "
+  for(int i=0; i<num1; i++){ //OBLICZA ODSTĘP POMIĘDZY ELEMENTAMI
+    for(int j=0; j< pow(2,num1-i)-1; j++){
+      mid[i] += " ";
     }
-    mid[i]+= " ";
-    num1--;
   }
   for(int i=0; i<num; i++){
-
-  }*/
+    cout << mid[i] << endl;
+  }
+  for(int i=0; i<num; i++){
+    cout << first[i] << endl;
+  }
+  int counter =0;
+  int counter1 =1;
+  for(int i=0; i<num; i++){
+    string a="";
+    counter1 = counter+pow(2,i);
+    a+=first[i];
+    for(int j=counter; j<counter1; j++){
+      if(j == size){
+        break;
+      }
+      a+= std::to_string(table[j])+mid[i];
+    }
+    counter = counter*2+1;
+    cout << a << endl;
+  }
 }
 /******************************************************************************/
 void Heap::erase(int number){ //usuwanie z kopca
