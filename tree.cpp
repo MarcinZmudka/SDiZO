@@ -25,14 +25,14 @@ Tree::Tree(int i){ // konstruktor dla Strażnika
   this->left = this;
   this->right = this;
   this->color = 's';
-  this->data = -1;
+  this->data = 0;
 }
 /******************************************************************************/
 Tree * Tree::import(){
   string line;
   fstream file;
   Tree * tree;
-  file.open("value1000.txt", ios::in);
+  file.open("value.txt", ios::in);
   if(file.good() == true)
   {
       while(!file.eof())
@@ -210,13 +210,82 @@ void Tree::rotationL(Tree * tree){
 }
 /******************************************************************************/
 void Tree::show(Tree * post){
-  cout << " "<< post->data << post->color << endl;
+  /*cout << " "<< post->data << post->color << endl;
   cout << post->left->data << post->left->color << " " << post->right->data << post->right->color << endl << endl;
   if(post->left->color != 's'){
     show(post->left);
   }
   if(post->right->color != 's'){
     show(post->right);
+  }*/
+  Tree ** table = new Tree *[128];
+  for(int i=0; i<128; i++){
+    table[i] = this->S;
+  }
+  table[0] = post;
+  show(0,table, post);
+  cout << endl;
+  ///******////
+  int num =5;
+  int size1 = 128;
+  /*while(size1 > pow(2, num)){
+    num++;
+  }*/
+  string * first = new string [num];
+  for(int i=0; i<num; i++){
+    first[i]="";
+  }
+  int num1 = num;
+  for(int i=0; i<num1; i++){ //OBLICZA ODSTĘP PIERWSZEGO ELEMNTU
+    for(int j=0; j< 2*(pow(2,num1-i-1)-1); j++){
+      first[i] += " ";
+    }
+  }
+  string * mid = new string[num];
+  for(int i=0; i<num; i++){
+    mid[i]="";
+  }
+  num1 = num;
+  for(int i=0; i<num1; i++){ //OBLICZA ODSTĘP POMIĘDZY ELEMENTAMI
+    for(int j=0; j< 2*(pow(2,num1-i)-1); j++){
+      mid[i] += " ";
+    }
+  }
+  int counter =0;
+  int counter1 =1;
+  for(int i=0; i<num-1; i++){
+    string a="";
+    counter1 = counter+pow(2,i);
+    a+=first[i];
+    for(int j=counter; j<counter1; j++){
+      if(j == size1){
+        break;
+      }
+      string value = "";
+      if(table[j]->data<10){
+        //value = "  "; // trzeba mieć na wuadze ilośc elemntów w drzeiwe
+        value += std::to_string(table[j]->data)+table[j]->color;
+
+      }
+      else if( table[j]->data<100){
+        //value = " ";
+        value += std::to_string(table[j]->data)+table[j]->color;
+      }
+      a+= value+mid[i];
+    }
+    counter = counter*2+1;
+    cout << a << endl;
+  }
+}
+/******************************************************************************/
+void Tree::show(int index, Tree ** table, Tree * post){
+  if(post->left->color != 's'){
+    table[2*index+1] = post->left;
+    show(2*index+1, table, post->left);
+  }
+  if (post->right->color != 's') {
+    table[2*index+2] = post->right;
+    show(2*index+2, table, post->right);
   }
 }
 /******************************************************************************/

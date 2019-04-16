@@ -12,6 +12,7 @@ class Tree  {
   Tree(int);
   Tree * import();
   void show(Tree * post);
+  void show(int,Tree ** table, Tree * post);
   Tree * add(int);
   void remove(int);
   void sort(int);

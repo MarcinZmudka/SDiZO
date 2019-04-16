@@ -12,8 +12,6 @@
 using namespace std;
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
-/********część do pomairów*********/
-//3. dokończ wyśietlanie drzewa
 void StartCounter()
 {
     LARGE_INTEGER li;
@@ -237,7 +235,7 @@ void heapMenu(){
         break;
       case 5:
         for(int i=0; i<30; i++){
-          heap->add(100+i);
+          heap->add(20+i);
         }
         break;
       case 6:
@@ -254,11 +252,11 @@ void treeMenu(){
   tree = tree->import();
   while(choose != 6){
     system("cls");
-    cout << " 1 - Dodaj na poczatek\n"
-         << " 2 - Usun pierwszy indeks\n"
-         << " 3 - Pokaz \n"
-         << " 4 - Wyszukaj \n"
-         << " 5 - dodaj 30 liczb\n"
+    cout << " 1 - Dodaj\n"
+         << " 2 - Usun\n"
+         << " 3 - Pokaz\n"
+         << " 4 - Wyszukaj\n"
+         << " 5 - Dodaj 30 liczb\n"
          << " 6 - Wyjdz \n";
     cin >> choose;
     int i = 0, j=0;;
@@ -295,7 +293,7 @@ void treeMenu(){
         break;
       case 5:
         for(int i=0; i<30; i++){
-          tree->add(i+100);
+          tree = tree->add(i+10);
         }
         break;
       case 6:
@@ -307,40 +305,9 @@ void treeMenu(){
 }
 /******************************************************************************/
 int main (){
-  fstream file("1000.txt", ios::out);
-  /*if(file.good()){
-    for(int i=0;i< 5000; i++){
-      file << i << endl;
-      file.flush();
-    }
-  }*/
-  /*Tree * tree = new Tree();
-  tree = tree->import();
-  tree->show(tree);*/
-
-
-  Tree * table = new Tree();
-  table = table->import();
-  StartCounter();
-  table->show(table);
-  file << GetCounter() << endl;
-  file.flush();
-  StartCounter();
-  table = table->add(115268);
-  file << GetCounter() << endl;
-  file.flush();
-  StartCounter();
-  table->remove(1);
-  file << GetCounter() << endl;
-  file.flush();
-  StartCounter();
-  table->find(14996);
-  file << GetCounter() << endl;
-  file.flush();
-  file.close();
   int choose;
   while( choose != 5){
-    //system("cls");
+    system("cls");
     cout << "Welcome !\n"
          << " 1 - table\n"
          << " 2 - list\n"

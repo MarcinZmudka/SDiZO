@@ -75,12 +75,7 @@ void Heap::show(){
       mid[i] += " ";
     }
   }
-  for(int i=0; i<num; i++){
-    cout << mid[i] << endl;
-  }
-  for(int i=0; i<num; i++){
-    cout << first[i] << endl;
-  }
+
   int counter =0;
   int counter1 =1;
   for(int i=0; i<num; i++){
@@ -91,7 +86,16 @@ void Heap::show(){
       if(j == size){
         break;
       }
-      a+= std::to_string(table[j])+mid[i];
+      string value = "";
+      if(table[j]<10){
+        //value = "  ";
+        value += std::to_string(table[j]);
+      }
+      else if( table[j]<100){
+        //value = " ";
+        value += std::to_string(table[j]);
+      }
+      a+= value+mid[i];
     }
     counter = counter*2+1;
     cout << a << endl;
