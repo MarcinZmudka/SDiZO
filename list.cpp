@@ -42,9 +42,13 @@ int  List::getValue(){
 /****************************************************************************/
 void List::deleteNumber(int value1){
   List * more;
-  more = this->getNext();
+  more = this;
   while(more){
     if(more->getValue() == value1){
+      if(more->getPrev() == nullptr){
+        this->deleteFirst();
+        return;
+      }
       (more->getPrev())->setNext(more->getNext());
       more->getNext()->setPrev(more->getPrev());
       break;
@@ -85,10 +89,13 @@ List * List::addFirst(int value1){
 /****************************************************************************/
 void List::search( int value1 ){
   List * more = this;
+  while(more->getPrev()){
+    more = more->getPrev();
+  }
   bool check = false;
   while(more->getNext()){
     if(more->getValue() == value1){
-      cout << value1 << "znajduje sie w liscie" << endl;
+      cout << value1 << " znajduje sie w liscie" << endl;
       check = true;
       break;
     }
@@ -103,14 +110,16 @@ void List::search( int value1 ){
   /****************************************************************************/
   void List::show(){
     List * a = this;
+    cout << endl;
     while(a->getPrev()){
       a = a->getPrev();
     }
     while(a){
-      cout << a->getValue() << endl;
+      cout << a->getValue() << " ";
       a = a->getNext();
     }
     a = NULL;
+    cout << endl;
     delete a;
   }
   /*****************************************************************************/
@@ -134,6 +143,9 @@ void List::search( int value1 ){
 /*****************************************************************************/
 void List::deleteFirst(){
   List * nexter = this;
+  while(nexter->getPrev()){
+    nexter = nexter->getPrev();
+  }
   while(nexter->getNext() != NULL){
     nexter->setValue(nexter->getNext()->getValue());
     nexter = nexter->getNext();
@@ -144,9 +156,13 @@ void List::deleteFirst(){
 /*****************************************************************************/
 void List::deleteLast(){
   List * nexter = next;
+  while(nexter->getPrev()){
+    nexter = nexter->getPrev();
+  }
   while(nexter->getNext() != NULL){
     nexter = nexter->getNext();
   }
   nexter->getPrev()->setNext(NULL);
+  nexter = NULL;
   delete nexter;
 }

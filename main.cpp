@@ -121,8 +121,8 @@ void listMenu(){
   while(choose != 8){
     system("cls");
     cout << " 1 - Dodaj wartosc\n"
-         << " 2 - Usun pierwszy indeks\n"
-         << " 3 - Usun ostatni indeks\n"
+         << " 2 - Usun pierwszy element\n"
+         << " 3 - Usun ostatni element\n"
          << " 4 - Usun dowolna wartosc\n"
          << " 5 - Pokaz\n"
          << " 6 - Wyszukaj \n"
@@ -132,9 +132,9 @@ void listMenu(){
     int i = 0, j=0;;
     switch( choose ){
       case 1:
-        cout << "Podaj cyfre :";
+        cout << "Podaj cyfre : ";
         cin >> i;
-        cout << "Podaj poprzedzajaca wartosc :";
+        cout << "Podaj poprzedzajaca wartosc : ";
         cin >> j;
         StartCounter();
         list->add(j, i);
@@ -155,7 +155,7 @@ void listMenu(){
         system("pause");
         break;
       case 4:
-        cout << "Podaj wartosc :";
+        cout << "Podaj wartosc : ";
         cin >> j;
         StartCounter();
         list->deleteNumber(j);
@@ -169,7 +169,7 @@ void listMenu(){
         system("pause");
         break;
       case 6:
-        cout << "\nPodaj liczby do wyszukania :";
+        cout << "\nPodaj liczby do wyszukania : ";
         cin  >> i;
         StartCounter();
         list->search(i);

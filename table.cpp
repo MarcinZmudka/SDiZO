@@ -54,8 +54,9 @@ void Table::addRandom(int number, int index){
 }
 /****************************************************************************/
 void Table::show(){
+  cout << endl;
   for(int i=0; i<size; i++){
-    cout << a[i] << endl;
+    cout << a[i]<< " ";
   }
   cout << endl;
 }

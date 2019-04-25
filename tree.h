@@ -19,5 +19,7 @@ class Tree  {
   void find(int);
   void rotationR(Tree * tree);
   void rotationL(Tree * tree);
-  Tree * findNext(Tree * tree);
+  //Tree * findNext(Tree * tree);
+  Tree * findNext(Tree * a);
+  Tree * minimum(Tree *a);
 };

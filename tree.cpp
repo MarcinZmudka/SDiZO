@@ -174,8 +174,8 @@ Tree * Tree::add(int k){
   return temp;
 }
 /******************************************************************************/
-void Tree::rotationR(Tree * tree){
-  Tree * b = tree->left;
+void Tree::rotationR(Tree * A){
+  /*Tree * b = tree->left;
   if(tree->up->left == tree){ // dziadkowi przypisujemy nowego wnuka
     tree->up->left = b;
   }
@@ -187,16 +187,35 @@ void Tree::rotationR(Tree * tree){
   b->up = tree->up;
   tree->up = b;
   b = NULL;
-  delete b;
+  delete b;*/
+  Tree * B, * p;
+  Tree * root = this;
+  B = A->left;
+  if(B != this->S)
+  {
+    p = A->up;
+    A->left = B->right;
+    if(A->left != this->S) A->left->up = A;
+
+    B->right = A;
+    B->up = p;
+    A->up = B;
+
+    if(p != this->S)
+    {
+      if(p->left == A) p->left = B; else p->right = B;
+    }
+    else root = B;
+  }
 }
 /******************************************************************************/
-void Tree::rotationL(Tree * tree){
-  Tree * b = tree->right;
+void Tree::rotationL(Tree * A){
+  /*Tree * b = tree->right;
   if(tree == tree->up->right && !(tree->up == this->S)){
     tree->up->right = b; // dziadkowi przypisujemy nowego wnuka
   }
   else if(tree->up == this->S){
-
+    //?
   }
   else{
     tree->up->left = b;
@@ -206,7 +225,26 @@ void Tree::rotationL(Tree * tree){
   b->up = tree->up; // ustawiamy ojca dla poddrzewa
   tree->up = b; // ojcowi przypisujemy syna jako ojca
   b = NULL;
-  delete b;
+  delete b;*/
+  Tree * B, * p;
+  Tree * root = this;
+  B = A->right;
+  if(B != this->S)
+  {
+    p = A->up;
+    A->right = B->left;
+    if(A->right != this->S) A->right->up = A;
+
+    B->left = A;
+    B->up = p;
+    A->up = B;
+
+    if(p != this->S)
+    {
+      if(p->left == A) p->left = B; else p->right = B;
+    }
+    else root = B;
+  }
 }
 /******************************************************************************/
 void Tree::show(Tree * post){
@@ -223,31 +261,28 @@ void Tree::show(Tree * post){
     table[i] = this->S;
   }
   table[0] = post;
+  cout <<endl;
   show(0,table, post);
-  cout << endl;
   ///******////
-  int num =5;
+  int num = 5;
   int size1 = 128;
-  /*while(size1 > pow(2, num)){
-    num++;
-  }*/
-  string * first = new string [num];
-  for(int i=0; i<num; i++){
+  string first[5];
+  for(int i=0; i<5; i++){
     first[i]="";
   }
   int num1 = num;
-  for(int i=0; i<num1; i++){ //OBLICZA ODSTĘP PIERWSZEGO ELEMNTU
+  for(int i=0; i<num1; i++){ //OBLICZA ODSTĘP PIERWSZEGO ELEMENTU
     for(int j=0; j< 2*(pow(2,num1-i-1)-1); j++){
       first[i] += " ";
     }
   }
-  string * mid = new string[num];
-  for(int i=0; i<num; i++){
+  string mid[5];
+  for(int i=0; i<5; i++){
     mid[i]="";
   }
   num1 = num;
-  for(int i=0; i<num1; i++){ //OBLICZA ODSTĘP POMIĘDZY ELEMENTAMI
-    for(int j=0; j< 2*(pow(2,num1-i)-1); j++){
+  for(int i=0; i<5; i++){ //OBLICZA ODSTĘP POMIĘDZY ELEMENTAMI
+    for(int j=0; j< 2*(pow(2,5-i)-1); j++){
       mid[i] += " ";
     }
   }
@@ -279,6 +314,10 @@ void Tree::show(Tree * post){
 }
 /******************************************************************************/
 void Tree::show(int index, Tree ** table, Tree * post){
+  //cout << post->data << " " << post->left->data << " " << post->right->data << endl;
+  if(index >= 128){
+    return;
+  }
   if(post->left->color != 's'){
     table[2*index+1] = post->left;
     show(2*index+1, table, post->left);
@@ -287,9 +326,10 @@ void Tree::show(int index, Tree ** table, Tree * post){
     table[2*index+2] = post->right;
     show(2*index+2, table, post->right);
   }
+
 }
 /******************************************************************************/
-Tree * Tree::findNext(Tree * tree){
+/*Tree * Tree::findNext(Tree * tree){
   if(tree->right->color != 's'){
     tree = tree->right;
     while(tree->left->color != 's'){
@@ -314,6 +354,7 @@ Tree * Tree::findNext(Tree * tree){
 /******************************************************************************/
 void Tree::remove(int del) {
     Tree *W, *Y, *Z;
+    Tree * root = this;
     Tree * deleter = this;
     while(deleter->data != del && deleter->color != 's'){ // znajdujemy węzeł, który zamierzamy usunąć
       if(deleter->data < del){
@@ -334,99 +375,134 @@ void Tree::remove(int del) {
       Y = findNext(deleter);
     }
 
+    //this->show(this);
     if (Y->left->color != 's'){
       Z = Y->left;
     }
     else{
       Z = Y->right;
     }
+    //this->show(this);
     Z->up = Y->up;
-    if (Y == Y->up->left){
+    if(Y->up->color == 's'){
+      root = Z;
+    }
+    else if (Y == Y->up->left){
       Y->up->left = Z;
     }
     else{
       Y->up->right = Z;
     }
-
+    //this->show(this);
     if (Y != deleter){
       deleter->data = Y->data;
     }
-    if (Y->color == 'b')   // Naprawa struktury drzewa czerwono-czarnego
-        while ((Z->color != 's') && (Z->color == 'b')){
-          cout << "e";
-          if (Z == Z->up->left) {
-              W = Z->up->right;
+    //cout << "\nb\n";
+    //this->show(this);
+    if ( Y->color == 'b')   // Naprawa struktury drzewa czerwono-czarnego
+        {
+          while ((Z != root) && (Z->color == 'b')){
+            if (Z == Z->up->left) {
+                W = Z->up->right;
+                //Przypadek 1
+                if (W->color == 'r') {
+                    W->color = 'b';
+                    Z->up->color = 'r';
+                    rotationL(Z->up);
+                    W = Z->up->right;
+                }
 
-              //Przypadek 1
-              if (W->color == 'r') {
-                  W->color = 'b';
-                  Z->up->color = 'r';
-                  rotationL(Z->up);
-                  W = Z->up->right;
-              }
+                //Przypadek 2
+                if ((W->left->color == 'b') && (W->right->color == 'b')) {
+                    W->color = 'r';
+                    Z = Z->up;
+                    continue;
+                }
 
-              //Przypadek 2
-              if ((W->left->color == 'b') && (W->right->color == 'b')) {
-                  W->color = 'r';
-                  Z = Z->up;
-                  continue;
-              }
+                //Przypadek 3
+                if (W->right->color == 'b') {
+                    W->left->color = 'b';
+                    W->color = 'r';
+                    rotationR(W);
+                    W = Z->up->right;
+                }
 
-              //Przypadek 3
-              if (W->right->color == 'b') {
-                  W->left->color = 'b';
-                  W->color = 'r';
-                  rotationR(W);
-                  W = Z->up->right;
-              }
-
-              //Przypadek 4
-              W->color = Z->up->color;
-              Z->up->color = 'b';
-              W->right->color = 'b';
-              rotationL(Z->up);
-
-              //Zakończenie pętli
-              Z = S;
-
-              //Przypadki lustrzane
-          } else {
-              W = Z->up->left;
-
-              //Lustrzany przypadek 1
-              if (W->color == 'r') {
-                  W->color = 'b';
-                  Z->up->color = 'r';
-                  rotationL(Z->up);
-                  W = Z->up->left;
-              }
-
-              //Lustrzany przypadek 2
-              if ((W->left->color == 'b') && (W->right->color == 'b')) {
-                  W->color = 'r';
-                  Z = Z->up;
-                  continue;
-              }
-
-              //Lustrzany przypadek 3
-              if (W->left->color == 'b') {
+                //Przypadek 4
+                W->color = Z->up->color;
+                Z->up->color = 'b';
                   W->right->color = 'b';
-                  W->color = 'r';
-                  rotationL(W);
-                  W = Z->up->left;
-              }
+                rotationL(Z->up);
 
-              //Lustrzany przypadek 4
-              W->color = Z->up->color;
-              Z->up->color = 'b';
-              W->left->color = 'b';
-              rotationR(Z->up);
+                //Zakończenie pętli
+                Z = root;
 
-              //Zakończenie pętli
-              Z = S;
+                //Przypadki lustrzane
+            } else {
+                W = Z->up->left;
+
+                //Lustrzany przypadek 1
+                if (W->color == 'r') {
+                    W->color = 'b';
+                    Z->up->color = 'r';
+                    rotationR(Z->up);
+                    W = Z->up->left;
+                }
+
+                //Lustrzany przypadek 2
+                if ((W->left->color == 'b') && (W->right->color == 'b')) {
+                    W->color = 'r';
+                    Z = Z->up;
+                    continue;
+                }
+
+                //Lustrzany przypadek 3
+                if (W->left->color == 'b') {
+                    W->right->color = 'b';
+                    W->color = 'r';
+                    rotationL(W);
+                    W = Z->up->left;
+                }
+
+                //Lustrzany przypadek 4
+                W->color = Z->up->color;
+                Z->up->color = 'b';
+                W->left->color = 'b';
+
+                rotationR(Z->up);
+
+                //Zakończenie pętli
+                Z = root;
+            }
           }
         }
 
-    Z->color = 'b';
+    //Z->color = 'b';
     delete Y;
+}
+/******************************************************************************/
+Tree * Tree::minimum(Tree * p)
+{
+  if(p != this->S)
+    while(p->left->color != 's') p = p->left;
+  return p;
+}
+/******************************************************************************/
+Tree * Tree::findNext(Tree * p){
+  Tree * r;
+
+  if(p != this->S)
+  {
+    if(p->right->color != 's'){ return minimum(p->right);}
+    else
+    {
+      r = p->up;
+      while((r->color != 's') && (p == r->right))
+      {
+        p = r;
+        r = r->up;
+      }
+      return r;
+    }
+  }
+  return this->S;
 }

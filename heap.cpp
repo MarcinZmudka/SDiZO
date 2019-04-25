@@ -45,9 +45,6 @@ void Heap::sort(int index){
 }
 /******************************************************************************/
 void Heap::show(){
-  for(int i = 0; i<size-1; i++){
-    cout << table[i] << " ";
-  }
   cout << endl;
   int num = 0;
   int size1 = size;
@@ -121,7 +118,7 @@ void Heap::erase(int number){ //usuwanie z kopca
     }
     delete[] table;
     table = table2;
-    for(int i=size; i>0; i--){
+    for(int i=size-1; i>0; i--){
       sort(i);
     }
   }
@@ -130,10 +127,11 @@ void Heap::erase(int number){ //usuwanie z kopca
 void Heap::find(int key){
   for(int i = 0; i< size; i++){
     if(table[i] == key){
-      cout << endl << key << "znajduje sie w kopcu" << endl;
-      break;
+      cout << endl << key << " znajduje sie w kopcu" << endl;
+      return;
     }
   }
+  cout << endl << key << " nie znajduje sie w kopcu" << endl;
 }
 /******************************************************************************/
 void Heap::import(){
